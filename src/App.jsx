@@ -3,13 +3,25 @@ import SearchBox from "./components/SearchBox/SearchBox";
 import ContactList from "./components/ContactList/ContactList";
 
 import "./App.css";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchContacts } from "./redux/contactsOps";
 
 function App() {
+  const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.contacts.isLoading);
+  const error = useSelector((state) => state.contacts.error);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
   return (
     <>
       <h1>Phonebook</h1>
       <ContactForm />
       <SearchBox />
+      {isLoading && !error && <b>Request in progress...</b>}
       <ContactList />
     </>
   );
